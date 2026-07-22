@@ -18,3 +18,8 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> custom ###
+.DS_Store
+**/.DS_Store
+###< custom ###

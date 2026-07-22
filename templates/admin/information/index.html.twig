@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Informations{% endblock %}
+
+{% block body %}
+
+<div class="center">
+
+    <h1>Gestion des informations</h1>
+
+    <a href="{{ path('admin_information_new') }}" class="btn">Ajouter une information</a>
+
+    <br><br>
+
+    {% for info in infos %}
+        <div class="card" style="margin-bottom:20px; width:100%;">
+            <h3>{{ info.title }}</h3>
+            <p>{{ info.content }}</p>
+
+            <a href="{{ path('admin_information_edit', {'id': info.id}) }}">Modifier</a> |
+
+            <form method="post"
+                  action="{{ path('admin_information_delete', {'id': info.id}) }}"
+                  style="display:inline;"
+                  onsubmit="return confirm('Supprimer cette information ?');">
+
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ info.id) }}">
+
+                <button style="border:none; background:none; cursor:pointer; color:red;">
+                    Supprimer
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <p>Aucune information</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

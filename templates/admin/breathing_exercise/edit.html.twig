@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un exercice{% endblock %}
+
+{% block body %}
+
+<div class="center">
+
+    <h1>Modifier un exercice</h1>
+
+    <div class="card" style="width:100%; max-width:600px;">
+
+        {{ form_start(form) }}
+
+            <!-- NAME EN HAUT -->
+            <div style="margin-bottom:15px;">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div style="margin-bottom:15px;">
+                {{ form_label(form.inhaleDuration) }}
+                {{ form_widget(form.inhaleDuration, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div style="margin-bottom:15px;">
+                {{ form_label(form.holdDuration) }}
+                {{ form_widget(form.holdDuration, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div style="margin-bottom:15px;">
+                {{ form_label(form.exhaleDuration) }}
+                {{ form_widget(form.exhaleDuration, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <button class="btn">Enregistrer</button>
+
+        {{ form_end(form) }}
+
+    </div>
+
+    <br>
+
+    <a href="{{ path('admin_exercise_index') }}" class="btn">Retour</a>
+
+</div>
+
+{% endblock %}

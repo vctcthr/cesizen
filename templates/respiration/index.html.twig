@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exercices de respiration{% endblock %}
+
+{% block body %}
+
+<div class="center">
+
+    <h1>Choisir un exercice</h1>
+
+    <div class="cards">
+
+        {% for exercise in exercises %}
+            <div class="card exercise-card"
+                 onclick="selectExercise(this, {{ exercise.inhaleDuration }}, {{ exercise.holdDuration }}, {{ exercise.exhaleDuration }})">
+
+                <h3>{{ exercise.name }}</h3>
+
+                <p>
+                    Inspire : {{ exercise.inhaleDuration }} sec<br>
+                    Pause : {{ exercise.holdDuration }} sec<br>
+                    Expire : {{ exercise.exhaleDuration }} sec
+                </p>
+
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <br><br>
+
+    <!-- ZONE -->
+    <div id="launchZone" style="display:none; text-align:center;">
+
+        <h2 id="statusText">Prêt ?</h2>
+
+        <button id="startBtn" class="btn" onclick="start()">▶️ Lancer</button>
+        <button id="stopBtn" class="btn stop" onclick="stop()" style="display:none;">⏹ Arrêter</button>
+
+    </div>
+
+    <br>
+
+    <div id="timer" style="text-align:center; font-size:20px;"></div>
+
+</div>
+
+<style>
+.exercise-card {
+    cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+.exercise-card:hover {
+    transform: scale(1.05);
+}
+
+.exercise-selected {
+    border: 3px solid #2f7d4b;
+    background: #e8f5e9;
+    box-shadow: 0 0 15px rgba(47,125,75,0.4);
+}
+
+.stop {
+    background: #e74c3c;
+}
+
+.stop:hover {
+    background: #c0392b;
+}
+</style>
+
+<script>
+let phases = [];
+let interval = null;
+
+function selectExercise(element, inhale, hold, exhale) {
+
+    // reset sélection
+    document.querySelectorAll('.exercise-card').forEach(card => {
+        card.classList.remove('exercise-selected');
+    });
+
+    element.classList.add('exercise-selected');
+
+    phases = [
+        { text: "Inspire", time: inhale },
+        { text: "Bloque", time: hold },
+        { text: "Expire", time: exhale }
+    ];
+
+    document.getElementById("launchZone").style.display = "block";
+    document.getElementById("statusText").innerText = "Prêt ?";
+    document.getElementById("timer").innerText = "";
+
+    document.getElementById("startBtn").style.display = "inline-block";
+    document.getElementById("stopBtn").style.display = "none";
+}
+
+function start() {
+
+    if (!phases.length) return;
+
+    let i = 0;
+    let timeLeft = phases[0].time;
+
+    clearInterval(interval);
+
+    document.getElementById("startBtn").style.display = "none";
+    document.getElementById("stopBtn").style.display = "inline-block";
+
+    function update() {
+        document.getElementById("statusText").innerText = phases[i].text;
+        document.getElementById("timer").innerText = timeLeft + " sec";
+
+        timeLeft--;
+
+        if (timeLeft < 0) {
+            i = (i + 1) % phases.length;
+            timeLeft = phases[i].time;
+        }
+    }
+
+    update();
+    interval = setInterval(update, 1000);
+}
+
+function stop() {
+    clearInterval(interval);
+
+    document.getElementById("statusText").innerText = "Arrêté";
+    document.getElementById("timer").innerText = "";
+
+    document.getElementById("startBtn").style.display = "inline-block";
+    document.getElementById("stopBtn").style.display = "none";
+}
+</script>
+
+{% endblock %}

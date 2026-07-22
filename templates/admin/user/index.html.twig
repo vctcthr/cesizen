@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Utilisateurs{% endblock %}
+
+{% block body %}
+
+<div class="center">
+
+    <h1>Gestion des utilisateurs</h1>
+
+    <a href="{{ path('admin_user_new') }}" class="btn">Ajouter un utilisateur</a>
+
+    <br><br>
+
+    <table style="width:100%; background:white; border-radius:10px; overflow:hidden;">
+        <thead style="background:#2f7d4b; color:white;">
+            <tr>
+                <th style="padding:10px;">ID</th>
+                <th style="padding:10px;">Email</th>
+                <th style="padding:10px;">Rôles</th>
+                <th style="padding:10px;">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for user in users %}
+            <tr style="text-align:center; border-bottom:1px solid #ddd;">
+                <td style="padding:10px;">{{ user.id }}</td>
+                <td style="padding:10px;">{{ user.email }}</td>
+                <td style="padding:10px;">
+                    {{ user.roles|join(', ') }}
+                </td>
+
+                <td style="padding:10px;">
+                    <a href="{{ path('admin_user_show', {'id': user.id}) }}"></a>
+                    <a href="{{ path('admin_user_edit', {'id': user.id}) }}"></a>
+
+                    <form method="post"
+                          action="{{ path('admin_user_delete', {'id': user.id}) }}"
+                          style="display:inline;"
+                          onsubmit="return confirm('Supprimer cet utilisateur ?');">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                        <button style="border:none; background:none; cursor:pointer;"></button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" style="padding:10px;">Aucun utilisateur</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

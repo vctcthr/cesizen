@@ -1,24 +1,211 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CESIZen{% endblock %}</title>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+    <!-- POLICES CHARTE -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@600&family=Montserrat&display=swap" rel="stylesheet">
 
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
-    </head>
-    <body>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: #FDF9E7;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 220px;
+            background: #16BC6D;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar h2 {
+            font-family: 'Lexend', sans-serif;
+            margin-bottom: 30px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            text-decoration: underline;
+        }
+
+        /* BOUTON ADMIN */
+        .admin-btn {
+            display: block;
+            margin-top: 15px;
+            background: #FED65C;
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .admin-btn:hover {
+            background: #f5c842;
+        }
+
+        /* AUTH */
+        .auth-btn {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login {
+            background: #FED65C;
+            color: black;
+        }
+
+        .logout {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .center {
+            max-width: 600px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        /* BOUTON PRINCIPAL */
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: #16BC6D;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #13a85f;
+        }
+
+        /* CARDS */
+        .cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* FORM */
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        /* SELECTION EXERCICE */
+        .exercise-card {
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .exercise-card:hover {
+            transform: scale(1.03);
+        }
+
+        .exercise-selected {
+            border: 3px solid #16BC6D;
+            background: #FDECA8;
+        }
+
+        .user-info {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div>
+            <h2>CESIZen</h2>
+
+            <div class="menu">
+                <a href="{{ path('home') }}">Accueil</a>
+                <a href="{{ path('info') }}">Informations</a>
+                <a href="{{ path('respiration') }}">Exercices</a>
+            </div>
+        </div>
+
+        <div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin') }}" class="admin-btn">⚙️ Administration</a>
+            {% endif %}
+
+            {% if app.user %}
+                <p class="user-info">👤 {{ app.user.userIdentifier }}</p>
+                <a href="{{ path('app_logout') }}" class="auth-btn logout">Déconnexion</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="auth-btn login">Connexion</a>
+            {% endif %}
+
+            <br>
+            <small>© CESIZen</small>
+
+        </div>
+
+    </div>
+
+    <!-- CONTENU -->
+    <div class="content">
         {% block body %}{% endblock %}
-    </body>
+    </div>
+
+</div>
+
+</body>
 </html>

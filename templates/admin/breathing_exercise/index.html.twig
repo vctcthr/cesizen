@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Exercices{% endblock %}
+
+{% block body %}
+
+<div class="center">
+
+    <h1>Gestion des exercices</h1>
+
+    <a href="{{ path('admin_exercise_new') }}" class="btn">Ajouter un exercice</a>
+
+    <br><br>
+
+    {% for exercise in breathing_exercises %}
+        <div class="card" style="margin-bottom:20px; width:100%;">
+
+            <h3>Durées :</h3>
+            <p>
+                Inspire : {{ exercise.inhaleDuration }} sec<br>
+                Pause : {{ exercise.holdDuration }} sec<br>
+                Expire : {{ exercise.exhaleDuration }} sec
+            </p>
+
+            <a href="{{ path('admin_exercise_edit', {'id': exercise.id}) }}">✏️ Modifier</a> |
+
+            <form method="post"
+                  action="{{ path('admin_exercise_delete', {'id': exercise.id}) }}"
+                  style="display:inline;"
+                  onsubmit="return confirm('Supprimer cet exercice ?');">
+
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercise.id) }}">
+
+                <button style="border:none; background:none; cursor:pointer; color:red;">
+                    Supprimer
+                </button>
+            </form>
+
+        </div>
+    {% else %}
+        <p>Aucun exercice</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

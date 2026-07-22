@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informations{% endblock %}
+
+{% block body %}
+
+<div class="info-container">
+
+    <!-- GAUCHE -->
+    <div class="info-left">
+
+        <h1>Comprendre le stress</h1>
+
+        <p>
+            Retrouvez des conseils et des informations pour mieux gérer votre stress
+            au quotidien et améliorer votre bien-être.
+        </p>
+
+    </div>
+
+    <!-- DROITE -->
+    <div class="info-right">
+
+        {% for info in infos %}
+            <div class="card info-card">
+                <h3>{{ info.title }}</h3>
+                <p>{{ info.content }}</p>
+            </div>
+        {% else %}
+            <p>Aucune information disponible</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<style>
+
+.info-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+/* GAUCHE */
+.info-left {
+    max-width: 400px;
+}
+
+.info-left h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.info-left p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* DROITE */
+.info-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+.info-card {
+    transition: 0.3s;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .info-container {
+        flex-direction: column;
+    }
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+<div class="home-container">
+
+    <!-- TEXTE GAUCHE -->
+    <div class="home-left">
+
+        <h1>Prenez un moment pour vous</h1>
+
+        <p>
+            CESIZen vous accompagne dans la gestion du stress grâce à des contenus
+            informatifs et des exercices simples.
+        </p>
+
+        <a href="{{ app.user ? path('respiration') : path('app_login') }}" class="btn">
+            Commencer un exercice
+        </a>
+
+    </div>
+
+    <!-- CARTES DROITE -->
+    <div class="home-right">
+
+        <div class="card">
+            <h3>Comprendre</h3>
+            <p>Accédez à des informations claires sur la santé mentale.</p>
+        </div>
+
+        <div class="card">
+            <h3>Respirer</h3>
+            <p>Pratiquez des exercices guidés pour vous détendre.</p>
+        </div>
+
+        <div class="card">
+            <h3>Progresser</h3>
+            <p>Suivez votre évolution et prenez soin de vous au quotidien.</p>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+.home-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+/* GAUCHE */
+.home-left {
+    max-width: 500px;
+}
+
+.home-left h1 {
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.home-left p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* DROITE */
+.home-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.home-right .card {
+    width: 250px;
+    transition: 0.3s;
+}
+
+.home-right .card:hover {
+    transform: translateY(-5px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .home-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .home-right {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+</style>
+
+{% endblock %}

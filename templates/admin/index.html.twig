@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+
+<div class="center">
+
+    <h1>Administration</h1>
+
+    <p>Bienvenue dans l’espace administrateur</p>
+
+    <a href="/admin/users" class="btn">Gérer les utilisateurs</a><br><br>
+    <a href="/admin/informations" class="btn">Gérer les informations</a><br><br>
+    <a href="/admin/exercises" class="btn">Gérer les exercices</a>
+
+</div>
+
+{% endblock %}
