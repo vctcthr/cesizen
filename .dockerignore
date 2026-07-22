@@ -1,0 +1,8 @@
+.git
+var/cache/*
+var/log/*
+docker
+tests
+.env.local
+.env.*.local
+node_modules

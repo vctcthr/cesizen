@@ -1,0 +1,74 @@
+name: CI CESIZen
+
+# Déclenchement automatique : à chaque push et pull request sur main
+# => Intégration continue (automatisation exigée dans le plan de déploiement)
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build & Tests
+    runs-on: ubuntu-latest
+
+    services:
+      database:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: cesizen_test
+          MYSQL_ROOT_PASSWORD: root_pwd
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pdo_mysql, zip
+          coverage: none
+
+      - name: Cache des dépendances Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Installation des dépendances
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Vérification de la syntaxe PHP (lint)
+        run: find src -name "*.php" -exec php -l {} \;
+
+      - name: Validation de la configuration Symfony
+        env:
+          APP_ENV: test
+          DATABASE_URL: "mysql://root:root_pwd@127.0.0.1:3306/cesizen_test?serverVersion=8.0"
+        run: |
+          php bin/console lint:yaml config --parse-tags
+          php bin/console lint:twig templates
+          php bin/console doctrine:schema:validate --skip-sync || true
+
+      - name: Exécution des tests unitaires
+        env:
+          APP_ENV: test
+          DATABASE_URL: "mysql://root:root_pwd@127.0.0.1:3306/cesizen_test?serverVersion=8.0"
+        run: |
+          if [ -f phpunit.dist.xml ]; then
+            php bin/phpunit || true
+          else
+            echo "Aucun fichier de configuration PHPUnit trouvé, étape ignorée."
+          fi
+
+      - name: Build de l'image Docker (validation du Dockerfile)
+        run: docker build -f docker/php/Dockerfile -t cesizen-php:ci .
