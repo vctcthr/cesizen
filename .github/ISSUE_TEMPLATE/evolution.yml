@@ -1,0 +1,26 @@
+name: ✨ Demande d'évolution
+description: Proposer une nouvelle fonctionnalité ou une amélioration
+title: "[EVOLUTION] "
+labels: ["evolution"]
+body:
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Besoin exprimé
+      description: Quel est le besoin métier ou utilisateur ?
+    validations:
+      required: true
+  - type: textarea
+    id: proposition
+    attributes:
+      label: Proposition de solution
+  - type: dropdown
+    id: priorite
+    attributes:
+      label: Priorité proposée
+      options:
+        - Haute
+        - Moyenne
+        - Basse
+    validations:
+      required: true

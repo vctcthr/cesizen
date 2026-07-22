@@ -1,0 +1,41 @@
+name: 🐛 Signalement d'anomalie
+description: Signaler un dysfonctionnement sur CESIZen
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: severite
+    attributes:
+      label: Sévérité
+      description: Cf. méthodologie de maintenance corrective du plan de maintenance
+      options:
+        - Bloquant (critique)
+        - Bloquant (forte)
+        - Majeur
+        - Mineur
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du problème
+      description: Que se passe-t-il ?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Étapes de reproduction
+      placeholder: |
+        1. Aller sur ...
+        2. Cliquer sur ...
+        3. Constater ...
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Comportement attendu
+  - type: input
+    id: environnement
+    attributes:
+      label: Environnement
+      placeholder: "Ex : navigateur, OS, environnement (test/prod)"
